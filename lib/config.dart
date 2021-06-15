@@ -61,4 +61,18 @@ class Configure{
     else
       return null;
   }
+
+  static ThemeData themeData() {
+    return ThemeData(
+      primarySwatch: Colors.blue,
+      primaryColor: Configure.themeColor,
+      // primaryColorBrightness: Brightness.dark,
+      hoverColor: Colors.cyanAccent,
+      buttonColor: Colors.yellow,
+      textSelectionTheme: TextSelectionThemeData(
+        selectionColor: Colors.red,
+        selectionHandleColor: Colors.deepPurple,
+      ),
+    );
+  }
 }

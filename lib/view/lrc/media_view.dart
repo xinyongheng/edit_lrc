@@ -16,10 +16,11 @@ class _MediaControlViewState extends State<MediaControlView> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.all(8),
       child: Column(
         children: [
           _firstCard(),
-          _secondCard()
+          _secondCard(),
         ],
       ),
     );
@@ -34,11 +35,7 @@ class _MediaControlViewState extends State<MediaControlView> {
       ),
       padding: EdgeInsets.all(8.w),
       child: Column(
-        children: [
-          _firstMenu(),
-          _paddingView(),
-          _secondMenu()
-        ],
+        children: [_firstMenu(), _paddingView(), _secondMenu()],
       ),
     );
   }
@@ -51,7 +48,11 @@ class _MediaControlViewState extends State<MediaControlView> {
 
   TextButton menuText(data, {onPressed}) {
     return TextButton(
-        onPressed: onPressed, child: Text(data, style: _menuStyle,));
+        onPressed: onPressed,
+        child: Text(
+          data,
+          style: _menuStyle,
+        ));
   }
 
   //第一行
@@ -87,7 +88,8 @@ class _MediaControlViewState extends State<MediaControlView> {
   }
 
   Widget _emptyView = Center(
-    child: Text('请先 导入 歌词',
+    child: Text(
+      '请先 导入 歌词',
       style: TextStyle(
         fontSize: 20.sp,
         fontWeight: Configure.bold,
@@ -103,29 +105,33 @@ class _MediaControlViewState extends State<MediaControlView> {
       lrcList.forEach((element) {
         list.add(_childView('geci'));
       });
-    }else{
+    } else {
       list.add(_emptyView);
     }
     return ListView(
       children: list,
+      semanticChildCount: list.length,
     );
   }
 
   Text _text(data) {
-    return Text(data, style: TextStyle(fontSize: Configure.normalSize),);
+    return Text(
+      data,
+      style: TextStyle(fontSize: Configure.normalSize),
+    );
   }
 
   Row _cardHead() {
     return Row(
       children: [
         Padding(
-          padding: EdgeInsets.only(
-              left: 5.w, top: 2.h, right: 20.w, bottom: 2.h),
+          padding:
+              EdgeInsets.only(left: 5.w, top: 2.h, right: 20.w, bottom: 2.h),
           child: Text("时间线"),
         ),
         Padding(
-          padding: EdgeInsets.only(
-              left: 5.w, top: 2.h, right: 20.w, bottom: 2.h),
+          padding:
+              EdgeInsets.only(left: 5.w, top: 2.h, right: 20.w, bottom: 2.h),
           child: Text("歌词内容"),
         ),
       ],
@@ -135,8 +141,14 @@ class _MediaControlViewState extends State<MediaControlView> {
   Widget _childView(lyric, {String timeTag = ''}) {
     return Row(
       children: [
-        Container(child: _text(timeTag), width: 50.w,),
-        Container(child: _text(lyric), width: 50.w,)
+        Container(
+          child: _text(timeTag),
+          width: 50.w,
+        ),
+        Container(
+          child: _text(lyric),
+          width: 50.w,
+        )
       ],
     );
   }
