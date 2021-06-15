@@ -3,7 +3,31 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 
+class LrcBean {
+  String text = "";
+  String timeString = "";
+  int milliTime = 0;
+}
+
 class LcrUtil {
+  Future<List<LrcBean>> loadMediaLrcBean(path) async {
+    String content = await loadMediaLrc(path);
+    List<String> list = content.split("\n");
+    RegExp regExpHost = RegExp(r'(\[\])(.+)');
+    List<LrcBean> lrcs = <LrcBean>[];
+    list.forEach((element) {
+      RegExpMatch? regExpMatch = regExpHost.firstMatch(element);
+      String time = regExpMatch?.group(1) ?? "";
+      String lrc = regExpMatch?.group(2) ?? "";
+      LrcBean lrcBean = LrcBean();
+      lrcBean.text = lrc;
+      lrcBean.timeString = time;
+      lrcBean.milliTime = 0;
+      lrcs.add(lrcBean);
+    });
+    return lrcs;
+  }
+
   Future<String> readText(path) async {
     return File(path).readAsString();
   }

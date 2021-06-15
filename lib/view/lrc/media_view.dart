@@ -20,7 +20,7 @@ class _MediaControlViewState extends State<MediaControlView> {
       child: Column(
         children: [
           _firstCard(),
-          _secondCard(),
+          Container(height: 300.h, child: _secondCard()),
         ],
       ),
     );
