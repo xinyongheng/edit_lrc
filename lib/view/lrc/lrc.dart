@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:html' as html;
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +10,35 @@ class LrcBean {
   int milliTime = 0;
 }
 
+typedef FileSelectResultListener = Function<T>(bool status,
+    {T? result, String? msg});
+
 class LcrUtil {
+  static Future<void> selectFileAsText(
+      FileSelectResultListener resultListener) async {
+    html.InputElement inputElement =
+        html.FileUploadInputElement() as html.InputElement;
+    inputElement.click();
+    inputElement.onChange.listen((event) {
+      final files = inputElement.files;
+      if (files?.length == 1) {
+        final file = files![0];
+        print('选中文件name=${file.name}');
+        final html.FileReader fileReader = html.FileReader();
+        fileReader.onLoadEnd.listen((event) {
+          print('结果：${fileReader.result}');
+          final result = fileReader.result as String;
+          resultListener(true, result: result, msg: "success");
+        });
+        fileReader.onError.listen((event) {
+          final result = 'error: ' + event.toString();
+          resultListener(false, msg: result);
+        });
+        fileReader.readAsText(file);
+      }
+    });
+  }
+
   Future<List<LrcBean>> loadMediaLrcBean(path) async {
     String content = await loadMediaLrc(path);
     List<String> list = content.split("\n");
