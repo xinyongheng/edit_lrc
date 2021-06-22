@@ -1,4 +1,5 @@
 import 'package:edit_lrc/config.dart';
+import 'package:edit_lrc/view/lrc/lrc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,19 +12,33 @@ class MediaControlView extends StatefulWidget {
 }
 
 class _MediaControlViewState extends State<MediaControlView> {
-  List<String> lrcList = [];
+  List<LrcBean> lrcList = [];
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8),
-      child: Column(
-        children: [
-          _firstCard(),
-          Container(height: 300.h, child: _secondCard()),
-        ],
+      child: ListView.builder(
+        itemBuilder: (context, index) => _childItem(context, index),
+        itemCount: lrcList.isEmpty ? 3 : 2 + lrcList.length,
       ),
     );
+  }
+
+  Widget _childItem(BuildContext context, int index) {
+    Widget child;
+    switch (index) {
+      case 0:
+        child = _firstCard();
+        break;
+      case 1:
+        child = _cardHead();
+        break;
+      //case 2:
+      default:
+        child = lrcList.isEmpty ? _emptyView : _childView(lrcList[index-2].text, timeTag: lrcList[index-2].timeString);
+    }
+    return child;
   }
 
   Widget _firstCard() {
@@ -125,13 +140,11 @@ class _MediaControlViewState extends State<MediaControlView> {
     return Row(
       children: [
         Padding(
-          padding:
-              EdgeInsets.only(left: 5.w, top: 2.h, right: 20.w, bottom: 2.h),
+          padding: EdgeInsets.only(left: 5.w, top: 2.h, right: 20.w, bottom: 2.h),
           child: Text("时间线"),
         ),
         Padding(
-          padding:
-              EdgeInsets.only(left: 5.w, top: 2.h, right: 20.w, bottom: 2.h),
+          padding: EdgeInsets.only(left: 5.w, top: 2.h, right: 20.w, bottom: 2.h),
           child: Text("歌词内容"),
         ),
       ],
